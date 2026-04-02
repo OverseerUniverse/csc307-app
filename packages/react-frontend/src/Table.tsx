@@ -1,10 +1,10 @@
-interface characterProps {
+interface CharacterProps {
   name: string;
   job: string;
 }
 
-interface characterList {
-  characterData: characterProps[];
+interface CharacterList {
+  characterData: CharacterProps[];
   removeCharacter: (characterData: number) => void;
 }
 
@@ -19,7 +19,7 @@ function TableHeader() {
   );
 }
 
-function TableBody(props: characterList) {
+function TableBody(props: CharacterList) {
   const rows = props.characterData.map((row, index) => {
     return (
       <tr key={index}>
@@ -36,7 +36,7 @@ function TableBody(props: characterList) {
   return <tbody>{rows}</tbody>;
 }
 
-function Table(props: characterList) {
+function Table(props: CharacterList) {
   return (
     <table>
       <TableHeader />
