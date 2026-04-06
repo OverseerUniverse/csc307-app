@@ -34,15 +34,15 @@ const users = {
   ],
 };
 
-const findUserByName = (name: string) => {
-  return users["users_list"].filter((user) => user["name"] === name);
-};
-
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
+
+const findUserByName = (name: string) => {
+  return users["users_list"].filter((user) => user["name"] === name);
+};
 
 app.get("/users", (req: Request, res: Response) => {
   const name = req.query.name;
@@ -51,6 +51,20 @@ app.get("/users", (req: Request, res: Response) => {
     res.send({ users_list: result });
   } else {
     res.send(users);
+  }
+});
+
+const findUserById = (id: string) => {
+  return users["users_list"].find((user) => user["id"] === id);
+};
+
+app.get("/users/:id", (req: Request, res: Response) => {
+  const id = req.params["id"]; //or req.params.id
+  if (typeof id === "string") {
+    let result = findUserById(id);
+    res.send(result);
+  } else {
+    res.status(404).send("Resource not found.");
   }
 });
 
