@@ -8,16 +8,15 @@
   "main": "backend.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon",
+    "dev": "npx nodemon ./src/backend.ts",
     "build": "tsc",
-    "backend": "node --watch src/backend.ts"
+    "start": "node ./src/backend.ts"
   },
   "dependencies": {
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.2"
   }

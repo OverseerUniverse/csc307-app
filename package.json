@@ -9,9 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npm run dev -w react-frontend",
-    "backend": "npm --prefix packages/express-backend run backend"
+    "start": "npm --prefix packages/express-backend run start"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
