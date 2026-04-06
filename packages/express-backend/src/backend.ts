@@ -34,6 +34,10 @@ const users = {
   ],
 };
 
+const findUserByName = (name: string) => {
+  return users["users_list"].filter((user) => user["name"] === name);
+};
+
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -41,7 +45,13 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/users", (req: Request, res: Response) => {
-  res.send(users);
+  const name = req.query.name;
+  if (typeof name === "string") {
+    let result = findUserByName(name);
+    res.send({ users_list: result });
+  } else {
+    res.send(users);
+  }
 });
 
 app.listen(port, () => {
