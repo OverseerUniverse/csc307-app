@@ -4,6 +4,12 @@ import type { Request, Response } from "express";
 const app = express();
 const port = 8000;
 
+interface User {
+  id: string;
+  name: string;
+  job: string;
+}
+
 const users = {
   users_list: [
     {
@@ -66,6 +72,17 @@ app.get("/users/:id", (req: Request, res: Response) => {
   } else {
     res.status(404).send("Resource not found.");
   }
+});
+
+const addUser = (user: User) => {
+  users["users_list"].push(user);
+  return user;
+};
+
+app.post("/users", (req: Request, res: Response) => {
+  const userToAdd = req.body;
+  addUser(userToAdd);
+  res.send();
 });
 
 app.listen(port, () => {
