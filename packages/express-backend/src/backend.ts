@@ -10,7 +10,11 @@ interface User {
   job: string;
 }
 
-const users = {
+interface UserList {
+  users_list: User[];
+}
+
+const users: UserList = {
   users_list: [
     {
       id: "xyz789",
@@ -60,8 +64,12 @@ app.get("/users", (req: Request, res: Response) => {
   }
 });
 
-const findUserById = (id: string) => {
-  return users["users_list"].find((user) => user["id"] === id);
+const findUserById = (id: string): User => {
+  const user = users["users_list"].find((user) => user["id"] === id);
+  if (user === undefined) {
+    throw new Error("user not found"); //throw handles the return type exception (never)
+  }
+  return user;
 };
 
 app.get("/users/:id", (req: Request, res: Response) => {
@@ -69,6 +77,16 @@ app.get("/users/:id", (req: Request, res: Response) => {
   if (typeof id === "string") {
     let result = findUserById(id);
     res.send(result);
+  } else {
+    res.status(404).send("Resource not found.");
+  }
+});
+
+app.delete("/users/:id", (req: Request, res: Response) => {
+  const id = req.params["id"]; //or req.params.id
+  if (typeof id === "string") {
+    let userId = findUserById(id);
+    res.status(200).send(`User ${userId} deleted.`);
   } else {
     res.status(404).send("Resource not found.");
   }
