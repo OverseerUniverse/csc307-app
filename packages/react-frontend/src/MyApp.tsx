@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOMClient from "react-dom/client";
 import "./main.css";
 import Table from "./Table";
@@ -30,15 +30,29 @@ if (container) {
 function MyApp() {
   const [characters, setCharacters] = useState<Person[]>([]);
 
+  async function fetchUsers() {
+    const promise = await fetch("http://localhost:8000/users");
+    return promise;
+  }
+
+  useEffect(() => {
+    fetchUsers()
+      .then((res) => res.json())
+      .then((json) => setCharacters(json["users_list"]))
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   function removeOneCharacter(index: number) {
-    const updated = characters.filter((character, i) => {
+    const updated = characters.filter((_character, i) => {
       return i !== index;
     });
     setCharacters(updated);
   }
 
   function updateList(person: Person) {
-      setCharacters([...characters, person]);
+    setCharacters([...characters, person]);
   }
   return (
     <div className="container">

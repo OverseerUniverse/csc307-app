@@ -1,5 +1,6 @@
 import express from "express";
 import type { Request, Response } from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
@@ -44,6 +45,7 @@ const users: UserList = {
   ],
 };
 
+app.use(cors()); //enable response from different origins
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
