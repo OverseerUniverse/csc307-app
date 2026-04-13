@@ -68,9 +68,9 @@ app.get("/users", (req: Request, res: Response) => {
 
   if (typeof name === "string" && typeof job === "string") {
     let result = findUsersByNameAndJob(name, job);
-    res.send({ users_list: result });
+    res.status(201).send({ users_list: result });
   } else {
-    res.send(users);
+    res.status(201).send(users);
   }
 });
 
@@ -89,29 +89,46 @@ app.get("/users/:id", (req: Request, res: Response) => {
     let result = findUserById(id);
     res.send(result);
   } else {
-    res.status(404).send("Resource not found.");
+    res.status(204).send("User not found.");
   }
 });
 
+//delete user
 app.delete("/users/:id", (req: Request, res: Response) => {
   const id = req.params["id"]; //or req.params.id
-  if (typeof id === "string") {
-    let userId = findUserById(id);
-    res.status(200).send(`User ${userId} deleted.`);
-  } else {
-    res.status(404).send("Resource not found.");
+  if (typeof id !== "string") {
+    return res.send("id is not a string");
   }
+
+  const user = findUserById(id);
+  if (!user) {
+    return res.status(404).send("User not found.");
+  }
+
+  users["users_list"] = users["users_list"].filter((u) => u.id !== id);
+
+  res.status(200).send(`User ${user.id} deleted.`);
 });
 
+function generateId() {
+  const id = Math.random().toString();
+  return id;
+}
+
 const addUser = (user: User) => {
-  users["users_list"].push(user);
-  return user;
+  const newUser: User = {
+    id: generateId(),
+    name: user.name,
+    job: user.job,
+  };
+  users["users_list"].push(newUser);
+  return newUser;
 };
 
 app.post("/users", (req: Request, res: Response) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  const createdUser = addUser(userToAdd);
+  res.status(201).send(createdUser);
 });
 
 app.listen(port, () => {

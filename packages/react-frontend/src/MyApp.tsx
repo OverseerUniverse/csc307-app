@@ -13,6 +13,7 @@ change the state and trigger a re-render.
 */
 
 interface Person {
+  id: string;
   name: string;
   job: string;
 }
@@ -44,19 +45,52 @@ function MyApp() {
       });
   }, []);
 
-  function removeOneCharacter(index: number) {
-    const updated = characters.filter((_character, i) => {
-      return i !== index;
+  async function removeUser(index: number) {
+    const userToDelete = characters[index];
+    try {
+      const promise = await fetch(
+        `http://localhost:8000/users/${userToDelete.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!promise.ok) {
+        throw new Error("Failed to delete user");
+      }
+      const updated = characters.filter((_character, i) => i !== index);
+      setCharacters(updated);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function postUser(person: Person) {
+    const promise = await fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(person),
     });
-    setCharacters(updated);
+
+    return promise;
   }
 
   function updateList(person: Person) {
-    setCharacters([...characters, person]);
+    postUser(person)
+      .then((res) => res.json())
+      .then((createdUser) => setCharacters([...characters, createdUser]))
+      .catch((error) => {
+        console.log(error);
+      });
   }
   return (
     <div className="container">
-      <Table characterData={characters} removeCharacter={removeOneCharacter} />
+      <Table characterData={characters} removeCharacter={removeUser} />
       <Form handleSubmit={updateList} />
     </div>
   );
