@@ -102,12 +102,12 @@ app.delete("/users/:id", (req: Request, res: Response) => {
 
   const user = findUserById(id);
   if (!user) {
-    return res.status(404).send("User not found.");
+    return res.status(404).send("resource not found.");
   }
 
   users["users_list"] = users["users_list"].filter((u) => u.id !== id);
 
-  res.status(200).send(`User ${user.id} deleted.`);
+  res.status(204).send(`User ${user.id} deleted.`);
 });
 
 function generateId() {
