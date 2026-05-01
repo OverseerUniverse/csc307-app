@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 interface Person {
-  id: string;
   name: string;
   job: string;
 }
@@ -12,7 +11,6 @@ interface FormProps {
 
 function Form(props: FormProps) {
   const [person, setPerson] = useState({
-    id: "",
     name: "",
     job: "",
   });
@@ -20,15 +18,15 @@ function Form(props: FormProps) {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     if (name === "job") {
-      setPerson({ id: person["id"], name: person["name"], job: value });
+      setPerson({ name: person["name"], job: value });
     } else {
-      setPerson({ id: person["id"], name: value, job: person["job"] });
+      setPerson({ name: value, job: person["job"] });
     }
   }
 
   function submitForm() {
     props.handleSubmit(person);
-    setPerson({ id: "", name: "", job: "" });
+    setPerson({ name: "", job: "" });
   }
 
   return (

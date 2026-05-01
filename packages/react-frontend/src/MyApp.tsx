@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ReactDOMClient from "react-dom/client";
 import "./main.css";
 import Table from "./Table";
@@ -13,7 +13,12 @@ change the state and trigger a re-render.
 */
 
 interface Person {
-  id: string;
+  _id: string;
+  name: string;
+  job: string;
+}
+
+interface NewPerson {
   name: string;
   job: string;
 }
@@ -49,7 +54,7 @@ function MyApp() {
     const userToDelete = characters[index];
     try {
       const promise = await fetch(
-        `http://localhost:8000/users/${userToDelete.id}`,
+        `http://localhost:8000/users/${userToDelete._id}`,
         {
           method: "DELETE",
           headers: {
@@ -68,7 +73,7 @@ function MyApp() {
     }
   }
 
-  async function postUser(person: Person) {
+  async function postUser(person: NewPerson) {
     const promise = await fetch("http://localhost:8000/users", {
       method: "POST",
       headers: {
@@ -80,7 +85,7 @@ function MyApp() {
     return promise;
   }
 
-  function updateList(person: Person) {
+  function updateList(person: NewPerson) {
     postUser(person)
       .then((res) => res.json())
       .then((createdUser) => setCharacters([...characters, createdUser]))

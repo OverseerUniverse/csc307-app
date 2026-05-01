@@ -17,12 +17,14 @@
     "exactOptionalPropertyTypes": true,
 
     // Recommended Options
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "strict": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

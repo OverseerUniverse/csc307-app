@@ -1,5 +1,5 @@
 interface CharacterProps {
-  id: string;
+  _id: string;
   name: string;
   job: string;
 }
@@ -21,15 +21,15 @@ function TableHeader() {
   );
 }
 
-function TableBody(props: CharacterList) {
-  const rows = props.characterData.map((row, index) => {
+function TableBody({characterData = [], removeCharacter} : CharacterList) {
+  const rows = characterData.map((row, index) => {
     return (
       <tr key={index}>
-        <td>{row.id}</td>
+        <td>{row._id}</td>
         <td>{row.name}</td>
         <td>{row.job}</td>
         <td>
-          <button onClick={() => props.removeCharacter(index)}>
+          <button onClick={() => removeCharacter(index)}>
             Delete
           </button>
         </td>
